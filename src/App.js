@@ -1,4 +1,10 @@
 import React, { Component } from 'react';
+import Options from './Components/Options';
+import Hardware from './Components/Hardware';
+import Total from './Components/Total';
+import Summary from './Components/Summary';
+import Features from './Components/Features';
+
 
 // Normalizes string as a slug - a string that is safe to use
 // in both URLs and html attributes
@@ -35,6 +41,7 @@ class App extends Component {
     }
   };
 
+  // UPDATE CART
   updateFeature = (feature, newValue) => {
     const selected = Object.assign({}, this.state.selected);
     selected[feature] = newValue;
@@ -43,35 +50,37 @@ class App extends Component {
     });
   };
 
+  //RENDER CART
   render() {
     const features = Object.keys(this.props.features).map((feature, idx) => {
       const featureHash = feature + '-' + idx;
       const options = this.props.features[feature].map(item => {
         const itemHash = slugify(JSON.stringify(item));
         return (
-          <div key={itemHash} className="feature__item">
-            <input
-              type="radio"
-              id={itemHash}
-              className="feature__option"
-              name={slugify(feature)}
-              checked={item.name === this.state.selected[feature].name}
-              onChange={e => this.updateFeature(feature, item)}
-            />
-            <label htmlFor={itemHash} className="feature__label">
-              {item.name} ({USCurrencyFormat.format(item.cost)})
-            </label>
-          </div>
+        <>
+          <Options
+          key={itemHash}
+          id={itemHash}
+          name={slugify(feature)}
+          checked={item.name === this.state.selected[feature].name}
+          onChange={e => this.updateFeature(feature, item)}
+          /> 
+          
+          <label htmlFor={itemHash} className="feature__label">
+          {item.name} ({USCurrencyFormat.format(item.cost)})
+          </label>
+        </>
         );
       });
 
       return (
-        <fieldset className="feature" key={featureHash}>
-          <legend className="feature__name">
-            <h3>{feature}</h3>
-          </legend>
-          {options}
-        </fieldset>
+
+        <Hardware 
+        title={feature}
+        featureHash={featureHash}
+        options = {options}     
+        />
+
       );
     });
 
@@ -103,15 +112,21 @@ class App extends Component {
         <main>
           <form className="main__form">
             <h2>Customize your laptop</h2>
-            {features}
+            <Features
+            features={features}
+            />
           </form>
           <section className="main__summary">
             <h2>Your cart</h2>
-            {summary}
+            <Summary
+            summary={summary}
+            />
             <div className="summary__total">
               <div className="summary__total__label">Total</div>
               <div className="summary__total__value">
-                {USCurrencyFormat.format(total)}
+                <Total 
+                Total={total}
+                />
               </div>
             </div>
           </section>
