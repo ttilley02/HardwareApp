@@ -2,11 +2,12 @@ import React from "react"
 import Options from './Options';
 import Hardware from './Hardware';
 import slugify from 'slugify';
+import './App.css'
+
 
 
 class Features extends React.Component {
     render(){
-      console.log(this.props.stateSelected)
        const features = Object.keys(this.props.features).map((feature, idx) => {
         const featureHash = feature + '-' + idx;
         const options = this.props.features[feature].map(item => {
@@ -18,7 +19,8 @@ class Features extends React.Component {
                 id={itemHash}
                 name={slugify(feature)}
                 checked={item.name === this.props.stateSelected[feature].name}
-                onChange={e => this.updateFeature(feature, item)}
+
+                onChange={e => this.props.updateFeature(feature, item)}
                 /> 
                 
                 <label htmlFor={itemHash} className="feature__label">

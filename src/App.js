@@ -1,16 +1,8 @@
 import React, { Component } from 'react';
-import Options from './Components/Options';
-import Hardware from './Components/Hardware';
 import Total from './Components/Total';
 import SummaryMake from './Components/SummaryMake';
 import Features from './Components/Features';
 
-
-// Normalizes string as a slug - a string that is safe to use
-// in both URLs and html attributes
-import slugify from 'slugify';
-
-import './App.css';
 
 // This object will allow us to
 // easily convert numbers into US dollar values
@@ -81,6 +73,7 @@ class App extends Component {
             features={this.props.features}
             USD = {USCurrencyFormat}
             stateSelected= {this.state.selected}
+            updateFeature = {this.updateFeature}
             />
           </form>
           <section className="main__summary">
