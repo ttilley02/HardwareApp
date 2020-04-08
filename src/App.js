@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Options from './Components/Options';
 import Hardware from './Components/Hardware';
 import Total from './Components/Total';
-import Summary from './Components/Summary';
+import SummaryMake from './Components/SummaryMake';
 import Features from './Components/Features';
 
 
@@ -52,57 +52,22 @@ class App extends Component {
 
   //RENDER CART
   render() {
-    const features = Object.keys(this.props.features).map((feature, idx) => {
-      const featureHash = feature + '-' + idx;
-      const options = this.props.features[feature].map(item => {
-        const itemHash = slugify(JSON.stringify(item));
-        return (
-        <>
-          <Options
-          key={itemHash}
-          id={itemHash}
-          name={slugify(feature)}
-          checked={item.name === this.state.selected[feature].name}
-          onChange={e => this.updateFeature(feature, item)}
-          /> 
-          
-          <label htmlFor={itemHash} className="feature__label">
-          {item.name} ({USCurrencyFormat.format(item.cost)})
-          </label>
-        </>
-        );
-      });
-
-      return (
-
-        <Hardware 
-        title={feature}
-        featureHash={featureHash}
-        options = {options}     
-        />
-
-      );
-    });
+    
 
     const summary = Object.keys(this.state.selected).map((feature, idx) => {
-      const featureHash = feature + '-' + idx;
+      const featureHash = feature;
       const selectedOption = this.state.selected[feature];
 
       return (
-        <div className="summary__option" key={featureHash}>
-          <div className="summary__option__label">{feature} </div>
-          <div className="summary__option__value">{selectedOption.name}</div>
-          <div className="summary__option__cost">
-            {USCurrencyFormat.format(selectedOption.cost)}
-          </div>
-        </div>
-      );
-    });
 
-    const total = Object.keys(this.state.selected).reduce(
-      (acc, curr) => acc + this.state.selected[curr].cost,
-      0
-    );
+        <SummaryMake
+        USD = {USCurrencyFormat}
+        featureHash = {featureHash}
+        selectedOption = {selectedOption}
+        
+        />
+      )
+    });
 
     return (
       <div className="App">
@@ -113,19 +78,23 @@ class App extends Component {
           <form className="main__form">
             <h2>Customize your laptop</h2>
             <Features
-            features={features}
+            features={this.props.features}
+            USD = {USCurrencyFormat}
+            stateSelected= {this.state.selected}
             />
           </form>
           <section className="main__summary">
             <h2>Your cart</h2>
-            <Summary
-            summary={summary}
-            />
+            
+            {summary}
+            
             <div className="summary__total">
               <div className="summary__total__label">Total</div>
               <div className="summary__total__value">
                 <Total 
-                Total={total}
+                Total={this.state.selected}
+                USD = {USCurrencyFormat}
+                
                 />
               </div>
             </div>
